@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
@@ -17,22 +19,58 @@ public class PalindromeCheckerApp {
         }
 
         // UC3: Palindrome Check Using String Reverse
-        // Data Structure: String
         String word = "racecar";
-
-        // Loop (for loop) - Iterating characters in reverse order
-        // String Immutability - every + creates a new String object
-        // String Concatenation - building reversed string char by char
         String reversedWord = "";
         for (int i = word.length() - 1; i >= 0; i--) {
             reversedWord = reversedWord + word.charAt(i);
         }
-
-        // equals() Method - comparing content of two String objects
         if (word.equals(reversedWord)) {
             System.out.println(word + " is a palindrome.");
         } else {
             System.out.println(word + " is not a palindrome.");
+        }
+
+        // UC4: Character Array Based Palindrome Check
+        String input = "level";
+        char[] chars = input.toCharArray();
+        int start = 0;
+        int end = chars.length - 1;
+        boolean isPalindrome = true;
+        while (start < end) {
+            if (chars[start] != chars[end]) {
+                isPalindrome = false;
+                break;
+            }
+            start++;
+            end--;
+        }
+        if (isPalindrome) {
+            System.out.println(input + " is a palindrome.");
+        } else {
+            System.out.println(input + " is not a palindrome.");
+        }
+
+        // UC5: Stack-Based Palindrome Checker
+        // Data Structure: Stack (LIFO - Last In First Out)
+        String stackInput = "radar";
+
+        // Push Operation - inserting characters into stack
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < stackInput.length(); i++) {
+            stack.push(stackInput.charAt(i));
+        }
+
+        // Pop Operation - removing characters in reverse order
+        // Reversal Logic - Stack naturally reverses order of elements
+        String stackReversed = "";
+        while (!stack.isEmpty()) {
+            stackReversed = stackReversed + stack.pop();
+        }
+
+        if (stackInput.equals(stackReversed)) {
+            System.out.println(stackInput + " is a palindrome.");
+        } else {
+            System.out.println(stackInput + " is not a palindrome.");
         }
 
     }
