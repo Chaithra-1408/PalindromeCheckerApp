@@ -1,4 +1,6 @@
 import java.util.Stack;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class PalindromeCheckerApp {
 
@@ -51,26 +53,53 @@ public class PalindromeCheckerApp {
         }
 
         // UC5: Stack-Based Palindrome Checker
-        // Data Structure: Stack (LIFO - Last In First Out)
         String stackInput = "radar";
-
-        // Push Operation - inserting characters into stack
         Stack<Character> stack = new Stack<>();
         for (int i = 0; i < stackInput.length(); i++) {
             stack.push(stackInput.charAt(i));
         }
-
-        // Pop Operation - removing characters in reverse order
-        // Reversal Logic - Stack naturally reverses order of elements
         String stackReversed = "";
         while (!stack.isEmpty()) {
             stackReversed = stackReversed + stack.pop();
         }
-
         if (stackInput.equals(stackReversed)) {
             System.out.println(stackInput + " is a palindrome.");
         } else {
             System.out.println(stackInput + " is not a palindrome.");
+        }
+
+        // UC6: Queue + Stack Based Palindrome Check
+        // Data Structures: Queue (FIFO) + Stack (LIFO)
+        String queueInput = "civic";
+
+        // Queue - FIFO (First In First Out)
+        // Enqueue Operation - inserting characters into queue
+        Queue<Character> queue = new LinkedList<>();
+        for (int i = 0; i < queueInput.length(); i++) {
+            queue.add(queueInput.charAt(i));
+        }
+
+        // Stack - LIFO (Last In First Out)
+        // Push Operation - inserting characters into stack
+        Stack<Character> stack2 = new Stack<>();
+        for (int i = 0; i < queueInput.length(); i++) {
+            stack2.push(queueInput.charAt(i));
+        }
+
+        // Logical Comparison
+        // Dequeue (queue) vs Pop (stack) to validate palindrome
+        boolean isQueueStackPalindrome = true;
+        while (!queue.isEmpty()) {
+            if (queue.poll() != stack2.pop()) {
+                isQueueStackPalindrome = false;
+                break;
+            }
+        }
+
+        if (isQueueStackPalindrome) {
+            System.out.println(queueInput + " is a palindrome.");
+        } else {
+            System.out.println(queueInput + " is not a palindrome.");
         }
 
     }
