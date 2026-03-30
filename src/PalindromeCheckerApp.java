@@ -1,6 +1,8 @@
 import java.util.Stack;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Deque;
+import java.util.ArrayDeque;
 
 public class PalindromeCheckerApp {
 
@@ -69,25 +71,15 @@ public class PalindromeCheckerApp {
         }
 
         // UC6: Queue + Stack Based Palindrome Check
-        // Data Structures: Queue (FIFO) + Stack (LIFO)
         String queueInput = "civic";
-
-        // Queue - FIFO (First In First Out)
-        // Enqueue Operation - inserting characters into queue
         Queue<Character> queue = new LinkedList<>();
         for (int i = 0; i < queueInput.length(); i++) {
             queue.add(queueInput.charAt(i));
         }
-
-        // Stack - LIFO (Last In First Out)
-        // Push Operation - inserting characters into stack
         Stack<Character> stack2 = new Stack<>();
         for (int i = 0; i < queueInput.length(); i++) {
             stack2.push(queueInput.charAt(i));
         }
-
-        // Logical Comparison
-        // Dequeue (queue) vs Pop (stack) to validate palindrome
         boolean isQueueStackPalindrome = true;
         while (!queue.isEmpty()) {
             if (queue.poll() != stack2.pop()) {
@@ -95,11 +87,38 @@ public class PalindromeCheckerApp {
                 break;
             }
         }
-
         if (isQueueStackPalindrome) {
             System.out.println(queueInput + " is a palindrome.");
         } else {
             System.out.println(queueInput + " is not a palindrome.");
+        }
+
+        // UC7: Deque-Based Optimized Palindrome Checker
+        // Data Structure: Deque (Double Ended Queue)
+        String dequeInput = "noon";
+
+        // Insert characters into Deque
+        // Deque allows insertion and deletion from both front and rear
+        Deque<Character> deque = new ArrayDeque<>();
+        for (int i = 0; i < dequeInput.length(); i++) {
+            deque.addLast(dequeInput.charAt(i));
+        }
+
+        // Front and Rear Access
+        // Remove first and last characters and compare
+        // Optimized - no need for separate reversal data structure
+        boolean isDequePalindrome = true;
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
+                isDequePalindrome = false;
+                break;
+            }
+        }
+
+        if (isDequePalindrome) {
+            System.out.println(dequeInput + " is a palindrome.");
+        } else {
+            System.out.println(dequeInput + " is not a palindrome.");
         }
 
     }
