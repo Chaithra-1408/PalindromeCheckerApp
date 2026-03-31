@@ -1,59 +1,76 @@
-import java.util.Scanner;
+import java.util.*;
 
-// Palindrome Service Class - Encapsulating Logic
-class PalindromeService {
+// 1. Define the Strategy Interface
+interface PalindromeStrategy {
+    boolean isPalindrome(String text);
+}
 
-    /**
-     * Public method to check palindrome status.
-     * Logic is hidden from the main method.
-     */
-    public boolean checkPalindrome(String input) {
-        if (input == null || input.isEmpty()) {
-            return false;
+// 2. Implementation A: Stack-Based Strategy
+class StackStrategy implements PalindromeStrategy {
+    @Override
+    public boolean isPalindrome(String text) {
+        String clean = text.replaceAll("[\\W]", "").toLowerCase();
+        Stack<Character> stack = new Stack<>();
+        for (char c : clean.toCharArray()) {
+            stack.push(c);
         }
+        StringBuilder reversed = new StringBuilder();
+        while (!stack.isEmpty()) {
+            reversed.append(stack.pop());
+        }
+        return clean.equals(reversed.toString());
+    }
+}
 
-        // Normalization (From UC10)
-        String cleanStr = input.replaceAll("[\\W]", "").toLowerCase();
+// 3. Implementation B: Deque-Based Strategy
+class DequeStrategy implements PalindromeStrategy {
+    @Override
+    public boolean isPalindrome(String text) {
+        String clean = text.replaceAll("[\\W]", "").toLowerCase();
+        Deque<Character> deque = new ArrayDeque<>();
+        for (char c : clean.toCharArray()) {
+            deque.addLast(c);
+        }
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
 
-        // Call internal recursive logic (Encapsulated)
-        return isRecursivePalindrome(cleanStr, 0, cleanStr.length() - 1);
+// 4. Context Class: The Palindrome Checker
+class PalindromeContext {
+    private PalindromeStrategy strategy;
+
+    // Inject strategy at runtime
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
     }
 
-    private boolean isRecursivePalindrome(String str, int low, int high) {
-        if (low >= high) {
-            return true;
-        }
-        if (str.charAt(low) != str.charAt(high)) {
-            return false;
-        }
-        return isRecursivePalindrome(str, low + 1, high - 1);
+    public boolean executeStrategy(String text) {
+        return strategy.isPalindrome(text);
     }
 }
 
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
-        // UC1: Welcome Message
         System.out.println("Welcome to the Palindrome Checker Management System");
-        System.out.println("Version : 1.0 (OOPS Edition)");
+        System.out.println("Version : 1.2 (Strategy Pattern)");
 
-        // Instantiate the Service Object
-        PalindromeService service = new PalindromeService();
+        PalindromeContext context = new PalindromeContext();
+        String testInput = "Race Car";
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("\nEnter a word or phrase: ");
-        String userInput = scanner.nextLine();
+        // --- Scenario 1: Using Stack Strategy ---
+        context.setStrategy(new StackStrategy());
+        System.out.println("\n[Strategy: Stack]");
+        System.out.println("Result: " + context.executeStrategy(testInput));
 
-        // Use the service to check palindrome
-        boolean result = service.checkPalindrome(userInput);
-
-        System.out.println("\n--- UC11: OOPS Result ---");
-        if (result) {
-            System.out.println("SUCCESS: \"" + userInput + "\" is a valid palindrome.");
-        } else {
-            System.out.println("FAILURE: \"" + userInput + "\" is NOT a palindrome.");
-        }
-
-        scanner.close();
+        // --- Scenario 2: Using Deque Strategy ---
+        context.setStrategy(new DequeStrategy());
+        System.out.println("\n[Strategy: Deque]");
+        System.out.println("Result: " + context.executeStrategy(testInput));
     }
 }
