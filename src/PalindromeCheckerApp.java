@@ -1,43 +1,25 @@
-import java.util.Stack;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Deque;
-import java.util.ArrayDeque;
+import java.util.Scanner;
 
-public class PalindromeCheckerApp {
-
-    public static void main(String[] args) {
-
-        // UC1: Welcome Message
-        System.out.println("Welcome to the Palindrome Checker Management System");
-        System.out.println("Version : 1.0");
-        System.out.println("System initialized successfully.");
-
-        // UC10 Logic: Normalization + Recursion
-        // Example phrase with mixed case and spaces
-        String phrase = "A man a plan a canal Panama";
-
-        System.out.println("\n--- UC10: Normalizing Input ---");
-        System.out.println("Original Phrase: " + phrase);
-
-        // Preprocessing: Remove everything except letters and numbers
-        // \\W matches any non-word character (spaces, punctuation)
-        String normalizedStr = phrase.replaceAll("[\\W]", "").toLowerCase();
-        System.out.println("Normalized String: " + normalizedStr);
-
-        // Apply Recursive Check (from UC9)
-        System.out.print("UC10 Result: ");
-        if (isRecursivePalindrome(normalizedStr, 0, normalizedStr.length() - 1)) {
-            System.out.println("\"" + phrase + "\" is a palindrome.");
-        } else {
-            System.out.println("\"" + phrase + "\" is not a palindrome.");
-        }
-    }
+// Palindrome Service Class - Encapsulating Logic
+class PalindromeService {
 
     /**
-     * Recursive Method used for the final check
+     * Public method to check palindrome status.
+     * Logic is hidden from the main method.
      */
-    public static boolean isRecursivePalindrome(String str, int low, int high) {
+    public boolean checkPalindrome(String input) {
+        if (input == null || input.isEmpty()) {
+            return false;
+        }
+
+        // Normalization (From UC10)
+        String cleanStr = input.replaceAll("[\\W]", "").toLowerCase();
+
+        // Call internal recursive logic (Encapsulated)
+        return isRecursivePalindrome(cleanStr, 0, cleanStr.length() - 1);
+    }
+
+    private boolean isRecursivePalindrome(String str, int low, int high) {
         if (low >= high) {
             return true;
         }
@@ -45,5 +27,33 @@ public class PalindromeCheckerApp {
             return false;
         }
         return isRecursivePalindrome(str, low + 1, high - 1);
+    }
+}
+
+public class PalindromeCheckerApp {
+
+    public static void main(String[] args) {
+        // UC1: Welcome Message
+        System.out.println("Welcome to the Palindrome Checker Management System");
+        System.out.println("Version : 1.0 (OOPS Edition)");
+
+        // Instantiate the Service Object
+        PalindromeService service = new PalindromeService();
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("\nEnter a word or phrase: ");
+        String userInput = scanner.nextLine();
+
+        // Use the service to check palindrome
+        boolean result = service.checkPalindrome(userInput);
+
+        System.out.println("\n--- UC11: OOPS Result ---");
+        if (result) {
+            System.out.println("SUCCESS: \"" + userInput + "\" is a valid palindrome.");
+        } else {
+            System.out.println("FAILURE: \"" + userInput + "\" is NOT a palindrome.");
+        }
+
+        scanner.close();
     }
 }
