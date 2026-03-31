@@ -6,6 +6,17 @@ import java.util.ArrayDeque;
 
 public class PalindromeCheckerApp {
 
+    // Node class for Singly Linked List
+    static class Node {
+        char data;
+        Node next;
+
+        Node(char data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
     public static void main(String[] args) {
 
         // UC1: Welcome Message
@@ -94,19 +105,11 @@ public class PalindromeCheckerApp {
         }
 
         // UC7: Deque-Based Optimized Palindrome Checker
-        // Data Structure: Deque (Double Ended Queue)
         String dequeInput = "noon";
-
-        // Insert characters into Deque
-        // Deque allows insertion and deletion from both front and rear
         Deque<Character> deque = new ArrayDeque<>();
         for (int i = 0; i < dequeInput.length(); i++) {
             deque.addLast(dequeInput.charAt(i));
         }
-
-        // Front and Rear Access
-        // Remove first and last characters and compare
-        // Optimized - no need for separate reversal data structure
         boolean isDequePalindrome = true;
         while (deque.size() > 1) {
             if (deque.removeFirst() != deque.removeLast()) {
@@ -114,11 +117,59 @@ public class PalindromeCheckerApp {
                 break;
             }
         }
-
         if (isDequePalindrome) {
             System.out.println(dequeInput + " is a palindrome.");
         } else {
             System.out.println(dequeInput + " is not a palindrome.");
+        }
+
+        // UC8: Linked List Based Palindrome Checker
+        // Data Structure: Singly Linked List
+        String listInput = "refer";
+
+        // Convert string to linked list - Node Traversal
+        Node head = new Node(listInput.charAt(0));
+        Node current = head;
+        for (int i = 1; i < listInput.length(); i++) {
+            current.next = new Node(listInput.charAt(i));
+            current = current.next;
+        }
+
+        // Fast and Slow Pointer Technique - find middle
+        Node slow = head;
+        Node fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // In-Place Reversal - reverse second half
+        Node prev = null;
+        Node curr = slow;
+        while (curr != null) {
+            Node nextNode = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = nextNode;
+        }
+
+        // Compare both halves
+        Node left = head;
+        Node right = prev;
+        boolean isLinkedListPalindrome = true;
+        while (right != null) {
+            if (left.data != right.data) {
+                isLinkedListPalindrome = false;
+                break;
+            }
+            left = left.next;
+            right = right.next;
+        }
+
+        if (isLinkedListPalindrome) {
+            System.out.println(listInput + " is a palindrome.");
+        } else {
+            System.out.println(listInput + " is not a palindrome.");
         }
 
     }
